@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question 2</title>
+  </head>
+  <body>
+    <div id="app">
+        <input type="text" v-model="txtSearch"> <br><br>
+        <table>
+            <tr>
+                <th>Category</th>
+            </tr>
+            <tr v-for="category in categories">
+                <td>{{category}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          categories: [],
+          sCategories: [],
+          txtSearch: ""
+        },
+        watch: {
+            txtSearch: function(val) {
+                // console.log(this.categories);
+                this.categories = this.sCategories.filter(category => {
+                    return category.toLowerCase().indexOf(val.toLowerCase()) > -1;
+                });
+            }
+        },
+        mounted() {
+          fetch("https://api.publicapis.org/categories")
+            .then((res) => res.json())
+            .then((res) => {
+              this.categories = res.categories;
+              this.sCategories = res.categories;
+            });
+        },
+      });
+    </script>
+  </body>
+</html>
